@@ -2,21 +2,19 @@ const express = require("express");
 const app = express();
 const port = 5656;
 
-app.get("/", (req, res) => {
-  res.send("Server Running");
+app.get("/user", (req, res) => {
+  //  {{url}}/user?userId=101&name=testing Query routing
+  console.log(req.query); //{ userId: '101', name: 'testing' }
+  //[Object: null prototype] prefix is just Node telling you the object has no prototype chain
+  res.send({ firstName: "Tirumala Teja", lastName: "Jampani" });
 });
-app.get("/test", (req, res) => {
-  //fetching data
-  res.send("Data fetched successfully");
+
+app.get("/student/:sId/:sRoll", (req, res) => {
+  //Dynamic routing we should definetly pass all the params mentioned
+  console.log(req.params);
+  res.send({ firstName: "Tirumala Teja", lastName: "Jampani" });
 });
-app.post("/test", (req, res) => {
-  //logic for saving data
-  res.send("Data saved successfully");
-});
-app.delete("/test", (req, res) => {
-  //logic for deleting data
-  res.send("Data Deleted successfully");
-});
+
 app.listen(port, () => {
   console.log("Server successfully running at port:", port);
 });
