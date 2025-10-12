@@ -1,33 +1,22 @@
 const express = require("express");
 const app = express();
 const port = 5656;
+const { studentAuth, userAuth } = require("./middleware/auth");
 
-app.get(
-  "/student",
-  [
-    (req, res, next) => {
-      console.log("Route Handler1");
-      // res.send("Response1");
-      next();
-    },
-    (req, res, next) => {
-      console.log("Route Handler2");
-      // res.send("Response2");
-      next();
-      //even though it is in an array output does'nt change
-    },
-  ],
-  (req, res, next) => {
-    console.log("Route Handler3");
-    // res.send("Response3");
-    next(); //Keeps on waiting if there was no 4th route handler
-  },
-  (req, res, next) => {
-    console.log("Route Handler4");
-    // res.send("Response4");
-    // next(); cannot get /student/ - if above line is commented
-  }
-);
+app.use("/student", studentAuth);
+
+app.get("/user/login", userAuth, (req, res) => {
+  console.log("login handler");
+  res.send("login successfull");
+});
+app.get("/student/data", (req, res) => {
+  console.log("student handler");
+  res.send("Data sent successfull");
+});
+app.get("/student/delete", (req, res) => {
+  console.log("Deleting data");
+  res.send("Data deleted..");
+});
 
 app.listen(port, () => {
   console.log("Server successfully running at port:", port);
