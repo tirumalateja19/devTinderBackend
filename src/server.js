@@ -1,8 +1,63 @@
 const express = require("express");
 const { PORT } = require("./config/constants");
 const connectDB = require("./config/database");
-
+const User = require("./models/users");
 const app = express();
+
+//express.json() converts the req json-object to Js-object
+app.use(express.json());
+
+//create user
+app.post("/signup", async (req, res) => {
+  //creating new instance of the User model
+  const user = new User(req.body);
+  try {
+    await user.save();
+    res.send("Data saved successfully");
+  } catch (err) {
+    res.status(400).send("Data failed to insert" + err.message);
+  }
+});
+//get user
+app.get("/user", async (req, res) => {
+  const email = req.body.emailId;
+  try {
+    const data = await User.findOne({ emailId: email });
+    res.send(data);
+  } catch (err) {
+    res.status(400).send("Data failed to insert" + err.message);
+  }
+});
+//update user
+app.patch("/user", async (req, res) => {
+  const userId = req.body.userId;
+  const items = req.body;
+  try {
+    await User.findByIdAndUpdate(userId, items);
+    res.send("updated successfully");
+  } catch (err) {
+    res.status(400).send("Data failed to insert" + err.message);
+  }
+});
+//delete user
+app.delete("/user", async (req, res) => {
+  const userId = req.body.userId;
+  try {
+    await User.findByIdAndDelete({ _id: userId });
+    res.send("Deleted successfully");
+  } catch (err) {
+    res.status(400).send("Data failed to delete" + err.message);
+  }
+});
+//get all users
+app.get("/feed", async (req, res) => {
+  try {
+    const data = await User.find({});
+    res.send(data);
+  } catch (err) {
+    res.status(400).send("Data failed to insert" + err.message);
+  }
+});
 
 connectDB()
   .then(() => {
