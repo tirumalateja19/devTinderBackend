@@ -28,17 +28,39 @@ app.get("/user", async (req, res) => {
     res.status(400).send("Data failed to insert" + err.message);
   }
 });
+
 //update user
-app.patch("/user", async (req, res) => {
-  const userId = req.body.userId;
+app.patch("/user/:userId", async (req, res) => {
+  const userId = req.params?.userId;
   const items = req.body;
+
   try {
-    await User.findByIdAndUpdate(userId, items);
+    const updateValidFields = [
+      "password",
+      "about",
+      "skills",
+      "photoUrl",
+      "gender",
+    ];
+    const isUpdateAllowed = Object.keys(items).every((k) =>
+      updateValidFields.includes(k)
+    );
+    if (items?.skills?.length > 10) {
+      throw new Error("Skills cannot be more than 10");
+    }
+    if (!isUpdateAllowed) {
+      throw new Error("Update not allowed");
+    }
+
+    await User.findByIdAndUpdate(userId, items, {
+      runValidators: true,
+    });
     res.send("updated successfully");
   } catch (err) {
-    res.status(400).send("Data failed to insert" + err.message);
+    res.status(400).send("Data failed to insert - " + err.message);
   }
 });
+
 //delete user
 app.delete("/user", async (req, res) => {
   const userId = req.body.userId;
