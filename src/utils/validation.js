@@ -10,7 +10,24 @@ const validateSignUpData = (req) => {
     throw new Error("Enter correct mail address");
   }
 };
-
+const validateProfileEditData = (req) => {
+  const validFields = [
+    "firstName",
+    "lastName",
+    "age",
+    "gender",
+    "photoUrl",
+    "skills",
+    "about",
+  ];
+  const isUpdateAllowed = Object.keys(req.body).every((k) =>
+    validFields.includes(k)
+  );
+  if (!isUpdateAllowed) {
+    throw new Error("Update not allowed");
+  }
+};
 module.exports = {
   validateSignUpData,
+  validateProfileEditData,
 };
