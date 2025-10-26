@@ -14,8 +14,10 @@
 
 ## *connectionRequestRouter*
 
-### `POST /request/send/intrested/:userId` 
-### `POST /request/send/ignored/:userId`
+### `POST /request/send/:status/:userId`
+(`POST /request/send/intrested/:userId`) 
+(`POST /request/send/ignored/:userId`)
+
 ### `POST /request/received/accepetd/:requestId`
 ### `POST /request/received/rejected/:requestId`
 
