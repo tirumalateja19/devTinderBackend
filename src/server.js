@@ -13,7 +13,7 @@ const cors = require("cors");
 const PORT = process.env.PORT;
 app.use(
   cors({
-    origin: "https://devtinder00.netlify.app/",
+    origin: "https://devtinder00.netlify.app",
     credentials: true,
   }),
 );
